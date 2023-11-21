@@ -29,15 +29,20 @@ def main():
     
     monthly_reviews_df["monthName"] = [month_name[i] for i in monthly_reviews_df.index]
     
-    plt.bar(x=monthly_reviews_df["monthName"], height=monthly_reviews_df["count"])
-    plt.plot(monthly_reviews_df["monthName"], monthly_reviews_df["count"], color="red")
-    plt.xticks(rotation=45)
-    plt.title("Number of Reviews by Mont")
-    plt.ylabel("Number of Reviews")
-    plt.xlabel("Month")
-    plt.show()
-    # plt.bar(x=)
+    # plt.bar(x=monthly_reviews_df["monthName"], height=monthly_reviews_df["count"])
+    # plt.plot(monthly_reviews_df["monthName"], monthly_reviews_df["count"], color="red")
+    # plt.xticks(rotation=45)
+    # plt.title("Number of Reviews by Mont")
+    # plt.ylabel("Number of Reviews")
+    # plt.xlabel("Month")
+    # plt.show()
 
+    print(reviews_df[["overall", "sentimentType"]])
+    sentiment_df = reviews_df.groupby(["overall", "sentimentType"]).size().to_frame("count").reset_index()
+    sentiment_pivot = sentiment_df.pivot_table(index=["overall"], columns=["sentimentType"], values=["count"])
+
+    # sentiment_pivot = pd.pivot_table(index=sentiment_df["overall"], columns=sentiment_df["sentimentType"], data=sentiment_df["count"])
+    print(sentiment_pivot)
 
 def get_reviews_df() -> pd.DataFrame:
     if(path.isfile(REVIEW_FILE_CLEANED)):
@@ -72,11 +77,11 @@ def get_sentiment_type(polarity):
    if(pd.isna(polarity)):
       return np.nan
    if(polarity > 0):
-      return 1
+      return "positive"
    if(polarity == 0):
-      return 0
+      return "neutral"
    if(polarity < 0):
-      return -1
+      return "negative"
 
 def parse(path):
   g = gzip.open(path, 'rb')
