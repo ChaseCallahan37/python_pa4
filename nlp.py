@@ -41,8 +41,13 @@ def main():
     sentiment_df = reviews_df.groupby(["overall", "sentimentType"]).size().to_frame("count").reset_index()
     sentiment_pivot = sentiment_df.pivot_table(index=["overall"], columns=["sentimentType"], values=["count"])
 
-    # sentiment_pivot = pd.pivot_table(index=sentiment_df["overall"], columns=sentiment_df["sentimentType"], data=sentiment_df["count"])
     print(sentiment_pivot)
+    sentiment_pivot.plot(kind="bar")
+    plt.ylabel("Number of Reviews")
+    plt.xlabel("Rating")
+    plt.title("Sentiment Type Distribution Across Rating")
+    plt.legend(["negative", "neutral", "positive"], title="sentiment_type")
+    plt.show()
 
 def get_reviews_df() -> pd.DataFrame:
     if(path.isfile(REVIEW_FILE_CLEANED)):
