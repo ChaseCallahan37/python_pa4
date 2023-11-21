@@ -1,3 +1,11 @@
+# Extras:
+# 1.    Added menu for choosing which analysis you would like to see
+#       as well as handling bad input
+
+# 2.    Will generate csv file that has already gone through cleaning
+#       and manipulation process for data set and save as csv. So that
+#       time to generate is less after first run through of script
+
 import pandas as pd
 import numpy as np
 import gzip
