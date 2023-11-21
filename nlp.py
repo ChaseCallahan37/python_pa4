@@ -5,6 +5,8 @@ from dateutil.parser import parse as date_parser
 from textblob import TextBlob
 import re
 import os.path as path
+from calendar import month_name
+import matplotlib.pyplot as plt
 
 
 REVIEWS_FILE_ORIGINAL = "reviews_Office_Products_5.json.gz"
@@ -14,6 +16,28 @@ REVIEW_FILE_CLEANED = "review_data_cleaned.csv"
 def main():
     reviews_df = get_reviews_df()
     print(reviews_df.describe())
+    print(reviews_df[["overall", "wordCount", "sentimentScore"]].describe())
+
+    monthly_reviews_df = pd.DataFrame({"month" : list(map(lambda x: x, range(1, 13)))})
+    monthly_reviews_df.reset_index().set_index(["month"])
+
+    reviews_by_month_df = reviews_df.groupby('month').size().to_frame('count')
+    
+    monthly_reviews_df["count"] = monthly_reviews_df["month"].apply(lambda x: reviews_by_month_df.loc[x]["count"])
+    monthly_reviews_df = monthly_reviews_df.set_index("month")
+    print(monthly_reviews_df)
+    
+    monthly_reviews_df["monthName"] = [month_name[i] for i in monthly_reviews_df.index]
+    
+    plt.bar(x=monthly_reviews_df["monthName"], height=monthly_reviews_df["count"])
+    plt.plot(monthly_reviews_df["monthName"], monthly_reviews_df["count"], color="red")
+    plt.xticks(rotation=45)
+    plt.title("Number of Reviews by Mont")
+    plt.ylabel("Number of Reviews")
+    plt.xlabel("Month")
+    plt.show()
+    # plt.bar(x=)
+
 
 def get_reviews_df() -> pd.DataFrame:
     if(path.isfile(REVIEW_FILE_CLEANED)):
