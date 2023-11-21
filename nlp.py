@@ -27,7 +27,6 @@ def main():
     menu_choice = get_menu_choice()
     while menu_choice != "5":
         if(menu_choice == "1"):
-           print(reviews_df.describe())
            print(reviews_df[["overall", "wordCount", "sentimentScore"]].describe())
         elif(menu_choice == "2"):
            ratings_by_month_analysis(reviews_df)
@@ -35,6 +34,8 @@ def main():
            sentiment_type_distribution_across_ratings_analysis(reviews_df)
         elif(menu_choice == "4"):
            average_sentiment_score_across_ratings_analysis(reviews_df)
+        elif(menu_choice == "5"):
+           print("Bye!")
         else:
            print("Invalid!!!\n")
         menu_choice = get_menu_choice()
@@ -90,6 +91,7 @@ def average_sentiment_score_across_ratings_analysis(reviews_df: pd.DataFrame):
     plt.title("Average Sentiment Score Across Ratings")
     plt.xlabel("Rating")
     plt.ylabel("Average Sentiment Score")
+    plt.yticks(np.arange(0.000, .275, .025))
     plt.show()
 
 def get_reviews_df() -> pd.DataFrame:
